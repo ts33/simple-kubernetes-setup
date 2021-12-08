@@ -1,0 +1,14 @@
+FROM alpine:3.15.0
+
+# Installing Libraries
+###############################################################################
+RUN apk add --no-cache --update postgresql-client
+
+# Copy source code
+###############################################################################
+
+COPY ./db-seed /root/src/
+WORKDIR /root/src
+
+# RUN node app.js
+ENTRYPOINT ["sh", "/root/src/run.sh"]

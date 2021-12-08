@@ -1,0 +1,1 @@
+INSERT INTO api_response VALUES (1, 'Hello World from the Database!') ON CONFLICT DO NOTHING;
