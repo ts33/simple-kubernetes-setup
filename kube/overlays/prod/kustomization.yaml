@@ -1,0 +1,5 @@
+resources:
+- ../../base
+replicas:
+- name: simple-api
+  count: 2

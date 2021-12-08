@@ -1,0 +1,4 @@
+resources:
+- deployment-db-claim.yaml
+- deployment-db.yaml
+- deployment-app.yaml

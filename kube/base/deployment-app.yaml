@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-api
+  labels:
+    app: simple-api
+spec:
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  selector:
+    app: simple-api
+    tier: frontend
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-api
+spec:
+  selector:
+    matchLabels:
+      app: simple-api
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: simple-api
+        tier: frontend
+    spec:
+      initContainers:
+      - name: init-db
+        image: db-seed
+        env:
+        - name: APP_DB_HOST
+          value: postgres
+        - name: APP_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-pass
+              key: password
+        imagePullPolicy: Never
+      containers:
+      - name: simple-api
+        image: node-app
+        ports:
+        - containerPort: 8000
+        env:
+        - name: APP_DB_HOST
+          value: postgres
+        - name: APP_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-pass
+              key: password
+        imagePullPolicy: Never
